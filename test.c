@@ -7,8 +7,8 @@ TEST(screen_space_to_pixel_conversion)
 
     ASSERT_THAT(result.x == 300);
     ASSERT_THAT(result.y == 300);
-
 }
+
 TEST(screen_space_to_pixel_conversion_negative)
 {
     point2_t result = screen_space_to_pixel(-0.5, -0.5, 400, 400);
@@ -22,7 +22,6 @@ TEST(screen_space_to_pixel_overflow)
 
     ASSERT_THAT(result.x == 400);
     ASSERT_THAT(result.y == 400);
-
 }
 
 TEST(screen_space_to_pixel_overflow_negative)
@@ -31,8 +30,8 @@ TEST(screen_space_to_pixel_overflow_negative)
 
     ASSERT_THAT(result.x == 0);
     ASSERT_THAT(result.y == 0);
-
 }
+
 int main(int argc, char **argv)
 {
     RUN_TEST(screen_space_to_pixel_conversion);
