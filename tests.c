@@ -7,13 +7,11 @@ TEST(screen_space_to_pixel_conversion)
 
     ASSERT_THAT(result.x == 200);
     ASSERT_THAT(result.y == 200);
-
 }
 
 int main(int argc, char **argv)
 {
-    RUN_TEST(run_test_screen_space_to_pixel_conversion);
-
+    RUN_TEST(screen_space_to_pixel_conversion);
     PRINT_TEST_RESULTS();
     return 0;
 }
