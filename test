@@ -1,2 +1,0 @@
-clang -o tests test.c math.c
-./tests
