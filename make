@@ -1,2 +1,2 @@
-clang -o main main.c
+clang -o main math.c main.c
 ./main
