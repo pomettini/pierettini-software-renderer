@@ -16,20 +16,21 @@ TEST(screen_space_to_pixel_conversion_negative)
     ASSERT_THAT(result.x == 100);
     ASSERT_THAT(result.y == 100);
 }
+
 TEST(screen_space_to_pixel_overflow)
 {
     point2_t result = screen_space_to_pixel(2, 2, 400, 400);
 
-    ASSERT_THAT(result.x == 400);
-    ASSERT_THAT(result.y == 400);
+    ASSERT_THAT(result.x == -1);
+    ASSERT_THAT(result.y == -1);
 }
 
 TEST(screen_space_to_pixel_overflow_negative)
 {
     point2_t result = screen_space_to_pixel(-2, -2, 400, 400);
 
-    ASSERT_THAT(result.x == 0);
-    ASSERT_THAT(result.y == 0);
+    ASSERT_THAT(result.x == -1);
+    ASSERT_THAT(result.y == -1);
 }
 
 int main(int argc, char **argv)
