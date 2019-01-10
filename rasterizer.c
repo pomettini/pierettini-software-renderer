@@ -76,10 +76,41 @@ void sort_triangle(context_t *ctx, triangle_t *triangle)
     float a_b = inversed_slope(point[0].x, point[0].y, point[1].x, point[1].y);
     float a_c = inversed_slope(point[0].x, point[0].y, point[2].x, point[2].y);
 
-    if (a_b < a_c)
-        SDL_Log("Left");
-    else
-        SDL_Log("Right");
+    // if (a_b < a_c)
+    //     SDL_Log("Left");
+    // else
+    //     SDL_Log("Right");
+
+    for (int i = 0; i < 100; i++)
+    {
+        for (int k = 0; k < 100; k++)
+        {
+            point2_t a_b;
+            a_b.x = (int)lerp(point[0].x, point[1].x, i / 100.0);
+            a_b.y = (int)lerp(point[0].y, point[1].y, i / 100.0);
+
+            point2_t a_c;
+            a_c.x = (int)lerp(point[0].x, point[2].x, i / 200.0);
+            a_c.y = (int)lerp(point[0].y, point[2].y, i / 200.0);
+
+            point2_t point_middle_abac;
+            point_middle_abac.x = (int)lerp(a_b.x, a_c.x, k / 100.0);
+            point_middle_abac.y = (int)lerp(a_b.y, a_c.y, k / 100.0);
+            put_pixel(point_middle_abac.x, point_middle_abac.y, ctx);
+
+            point2_t b_c;
+            b_c.x = (int)lerp(point[1].x, point[2].x, i / 100.0);
+            b_c.y = (int)lerp(point[1].y, point[2].y, i / 100.0);
+
+            a_c.x = (int)lerp(point[0].x, point[2].x, (i / 200.0) + 0.5);
+            a_c.y = (int)lerp(point[0].y, point[2].y, (i / 200.0) + 0.5);
+
+            point2_t point_middle_abbc;
+            point_middle_abbc.x = (int)lerp(a_b.x, a_c.x, k / 100.0);
+            point_middle_abbc.y = (int)lerp(a_b.y, a_c.y, k / 100.0);
+            put_pixel(point_middle_abbc.x, point_middle_abbc.y, ctx);
+        }
+    }
 }
 
 void swap_point(point2_t *point1, point2_t *point2)
