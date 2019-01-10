@@ -1,3 +1,4 @@
+
 #include "math.h"
 
 typedef struct context
@@ -18,6 +19,8 @@ typedef struct vertex
     int raster_y;
 } vertex_t;
 
+vertex_t vertex_new(vector3_t position);
+
 typedef struct triangle
 {
     vertex_t a;
@@ -25,4 +28,6 @@ typedef struct triangle
     vertex_t c;
 } triangle_t;
 
-void rasterize(context_t *ctx, triangle_t triangle);
+triangle_t triangle_new(vertex_t a, vertex_t b, vertex_t c);
+
+void rasterize(context_t *ctx, triangle_t *triangle);

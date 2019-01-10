@@ -10,8 +10,12 @@ ifeq ($(OS),Windows_NT)
 	BINARY_TESTS:=$(BINARY_TESTS).exe
 endif
 
-raytracer: main.o math.o
+raytracer: main.o math.o rasterizer.o
 	$(CC) -o $(BINARY) $(LDFLAGS) $^
+
+rasterizer.o: rasterizer.c
+	$(CC) -c -o $@ $(CFLAGS) $^
+	$(CPPCHECK) $^
 
 math.o: math.c
 	$(CC) -c -o $@ $(CFLAGS) $^
