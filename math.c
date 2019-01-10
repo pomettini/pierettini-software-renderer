@@ -13,3 +13,10 @@ point2_t screen_space_to_pixel(float x, float y, int width, int height)
 
     return point;
 }
+
+vector3_t vector3_new(float x, float y, float z)
+{
+    vector3_t hello;
+    return hello;
+}
+
