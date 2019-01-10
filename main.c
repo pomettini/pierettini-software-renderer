@@ -3,6 +3,13 @@
 #include "math.h"
 #include <SDL2/SDL.h>
 
+#define triangle(x0, y0, x1, y1, z1, x2, y2, z2)\
+triangle_new(\
+Vertex_new(vector3_new(x0, y0, z0)), \
+Vertex_new(vector3_new(x1, y1, z1)),\
+Vertex_new(vector3_new(x2, y2, z2))\
+)
+
 // TODO
 // * Piera must handle errors
 
@@ -14,6 +21,8 @@ int main()
 
     ctx.framebuffer = NULL;
 
+    triangle_t triangle = triangle(triangle(0, 0.5, 0, -0.5, 0, 0, 0.5, 0, 0);)
+    
     if (!ctx.framebuffer)
         return -1;
 
