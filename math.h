@@ -17,8 +17,8 @@ typedef struct vector3
     float z;
 } vector3_t;
 
-vector3_t vector3_new(float x, float y, float z);
-
-vector3_t vector3_zero();
-
 point2_t screen_space_to_pixel(float x, float y, int width, int height);
+vector3_t vector3_new(float x, float y, float z);
+vector3_t vector3_zero();
+float lerp(float start, float end, float gradient);
+float inversed_slope(float x0, float y0, float x1, float y1);

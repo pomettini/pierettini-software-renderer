@@ -16,7 +16,22 @@ point2_t screen_space_to_pixel(float x, float y, int width, int height)
 
 vector3_t vector3_new(float x, float y, float z)
 {
-    vector3_t hello;
-    return hello;
+    vector3_t vector3 = {.x = x, .y = y, .z = z};
+    return vector3;
 }
 
+vector3_t vector3_zero()
+{
+    vector3_t vector3 = {0, 0, 0};
+    return vector3;
+}
+
+float lerp(float start, float end, float gradient)
+{
+    return start + (end - start) * gradient;
+}
+
+float inversed_slope(float x0, float y0, float x1, float y1)
+{
+    return (x1 - x0) / (y1 - y0);
+}
