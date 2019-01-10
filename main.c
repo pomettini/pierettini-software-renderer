@@ -21,8 +21,11 @@ int main(int argc, char **argv)
 
     ctx.framebuffer = NULL;
 
-    triangle_t triangle = triangle(0, 0.5, 0, -0.5, 0, 0, 0.5, 0, 0);
-    
+    triangle_t triangle = triangle(
+        0, 0.5, 0,
+        -0.5, 0, 0,
+        0.5, 0, 0);
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window *window = SDL_CreateWindow("Pierettini Renderer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, 0);

@@ -30,4 +30,6 @@ typedef struct triangle
 
 triangle_t triangle_new(vertex_t a, vertex_t b, vertex_t c);
 
+void put_pixel(int x, int y, context_t *ctx);
+
 void rasterize(context_t *ctx, triangle_t *triangle);
