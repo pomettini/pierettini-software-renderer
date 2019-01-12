@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
     triangle_t triangle = triangle(
         0, 0.5, 0,
-        -0.5, 0, 0,
+        0.5, 0, 0,
         0, -0.5, 0);
 
     SDL_Init(SDL_INIT_VIDEO);

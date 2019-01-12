@@ -1,6 +1,10 @@
 #include "rasterizer.h"
 #include <string.h>
 
+#define A point[0]
+#define B point[1]
+#define C point[2]
+
 vertex_t vertex_new(vector3_t position)
 {
     vertex_t vertex;
@@ -29,10 +33,6 @@ void put_pixel(int x, int y, context_t *ctx)
 
 void rasterize(context_t *ctx, triangle_t *triangle)
 {
-    // SDL_Log("a: %f %f %f", triangle->a.position.x, triangle->a.position.y, triangle->a.position.z);
-    // SDL_Log("b: %f %f %f", triangle->b.position.x, triangle->b.position.y, triangle->b.position.z);
-    // SDL_Log("c: %f %f %f", triangle->c.position.x, triangle->c.position.y, triangle->c.position.z);
-
     point2_t pixel = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
 
     put_pixel(pixel.x, pixel.y, ctx);
@@ -45,72 +45,106 @@ void rasterize(context_t *ctx, triangle_t *triangle)
 
     put_pixel(pixel.x, pixel.y, ctx);
 
-    sort_triangle(ctx, triangle);
-}
-
-void sort_triangle(context_t *ctx, triangle_t *triangle)
-{
     point2_t point[3];
+    sort_triangle(ctx, point, triangle);
 
-    point[0] = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
-    point[1] = screen_space_to_pixel(triangle->b.position.x, triangle->b.position.y, ctx->width, ctx->height);
-    point[2] = screen_space_to_pixel(triangle->c.position.x, triangle->c.position.y, ctx->width, ctx->height);
+    float a_b_slope = inversed_slope(point[0].x, point[0].y, point[1].x, point[1].y);
+    float a_c_slope = inversed_slope(point[0].x, point[0].y, point[2].x, point[2].y);
+    float b_c_slope = inversed_slope(point[1].x, point[1].y, point[2].x, point[2].y);
 
-    // SDL_Log("0: %d", point[0].y);
-    // SDL_Log("1: %d", point[1].y);
-    // SDL_Log("2: %d", point[2].y);
-
-    if (point[0].y > point[1].y)
-        swap_point(&point[0], &point[1]);
-
-    if (point[1].y > point[2].y)
-        swap_point(&point[1], &point[2]);
-
-    if (point[0].y > point[1].y)
-        swap_point(&point[0], &point[1]);
-
-    // SDL_Log("00: %d", point[0].y);
-    // SDL_Log("11: %d", point[1].y);
-    // SDL_Log("22: %d", point[2].y);
-
-    float a_b = inversed_slope(point[0].x, point[0].y, point[1].x, point[1].y);
-    float a_c = inversed_slope(point[0].x, point[0].y, point[2].x, point[2].y);
-
-    // if (a_b < a_c)
+    // if (a_b_slope < a_c_slope)
     //     SDL_Log("Left");
     // else
     //     SDL_Log("Right");
 
-    for (int i = 0; i < 100; i++)
+    for (int y = A.y; y <= B.y; y++)
     {
-        for (int k = 0; k < 100; k++)
+        int x = A.x + ((y - A.y) * a_b_slope);
+        put_pixel(x, y, ctx);
+    }
+
+    for (int y = A.y; y <= (C.y * 0.5) + (A.y * 0.5); y++)
+    {
+        int x = A.x + ((y - A.y) * a_c_slope);
+        put_pixel(x, y, ctx);
+    }
+
+    for (int y = B.y; y <= C.y; y++)
+    {
+        int x = B.x + ((y - B.y) * b_c_slope);
+        put_pixel(x, y, ctx);
+    }
+
+    for (int y = (C.y * 0.5) + (A.y * 0.5); y <= C.y; y++)
+    {
+        int x = A.x + ((y - A.y) * a_c_slope);
+        put_pixel(x, y, ctx);
+    }
+
+    // The code below has been stolen from https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling
+
+    int total_height = C.y - A.y;
+    for (int y = A.y; y <= B.y; y++)
+    {
+        int segment_height = B.y - A.y + 1;
+        float alpha = (float)(y - A.y) / total_height;
+        float beta = (float)(y - A.y) / segment_height;
+
+        point2_t point_a;
+        point_a.x = A.x + (C.x - A.x) * alpha;
+        point_a.y = A.y + (C.y - A.y) * alpha;
+
+        point2_t point_b;
+        point_b.x = A.x + (B.x - A.x) * beta;
+        point_b.y = A.y + (B.y - A.y) * beta;
+
+        if (point_a.x > point_b.x)
+            swap_point(&point_a, &point_b);
+
+        for (int j = point_a.x; j <= point_b.x; j++)
         {
-            point2_t a_b;
-            a_b.x = (int)lerp(point[0].x, point[1].x, i / 100.0);
-            a_b.y = (int)lerp(point[0].y, point[1].y, i / 100.0);
-
-            point2_t a_c;
-            a_c.x = (int)lerp(point[0].x, point[2].x, i / 200.0);
-            a_c.y = (int)lerp(point[0].y, point[2].y, i / 200.0);
-
-            point2_t point_middle_abac;
-            point_middle_abac.x = (int)lerp(a_b.x, a_c.x, k / 100.0);
-            point_middle_abac.y = (int)lerp(a_b.y, a_c.y, k / 100.0);
-            put_pixel(point_middle_abac.x, point_middle_abac.y, ctx);
-
-            point2_t b_c;
-            b_c.x = (int)lerp(point[1].x, point[2].x, i / 100.0);
-            b_c.y = (int)lerp(point[1].y, point[2].y, i / 100.0);
-
-            a_c.x = (int)lerp(point[0].x, point[2].x, (i / 200.0) + 0.5);
-            a_c.y = (int)lerp(point[0].y, point[2].y, (i / 200.0) + 0.5);
-
-            point2_t point_middle_abbc;
-            point_middle_abbc.x = (int)lerp(a_b.x, a_c.x, k / 100.0);
-            point_middle_abbc.y = (int)lerp(a_b.y, a_c.y, k / 100.0);
-            put_pixel(point_middle_abbc.x, point_middle_abbc.y, ctx);
+            put_pixel(j, y, ctx);
         }
     }
+
+    for (int y = B.y; y <= C.y; y++)
+    {
+        int segment_height = C.y - B.y + 1;
+        float alpha = (float)(y - A.y) / total_height;
+        float beta = (float)(y - B.y) / segment_height;
+
+        point2_t point_a;
+        point_a.x = A.x + (C.x - A.x) * alpha;
+        point_a.y = A.y + (C.y - A.y) * alpha;
+
+        point2_t point_b;
+        point_b.x = B.x + (C.x - B.x) * beta;
+        point_b.y = B.y + (C.y - B.y) * beta;
+
+        if (point_a.x > point_b.x)
+            swap_point(&point_a, &point_b);
+
+        for (int j = point_a.x; j <= point_b.x; j++)
+        {
+            put_pixel(j, y, ctx);
+        }
+    }
+}
+
+void sort_triangle(context_t *ctx, point2_t *point, triangle_t *triangle)
+{
+    A = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
+    B = screen_space_to_pixel(triangle->b.position.x, triangle->b.position.y, ctx->width, ctx->height);
+    C = screen_space_to_pixel(triangle->c.position.x, triangle->c.position.y, ctx->width, ctx->height);
+
+    if (A.y > B.y)
+        swap_point(&A, &B);
+
+    if (B.y > C.y)
+        swap_point(&B, &C);
+
+    if (A.y > B.y)
+        swap_point(&A, &B);
 }
 
 void swap_point(point2_t *point1, point2_t *point2)

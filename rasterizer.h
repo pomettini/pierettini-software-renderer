@@ -1,6 +1,9 @@
 
 #include "math.h"
 
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+
 typedef struct context
 {
     int width;
@@ -31,5 +34,5 @@ typedef struct triangle
 triangle_t triangle_new(vertex_t a, vertex_t b, vertex_t c);
 void put_pixel(int x, int y, context_t *ctx);
 void rasterize(context_t *ctx, triangle_t *triangle);
-void sort_triangle(context_t *ctx, triangle_t *triangle);
+void sort_triangle(context_t *ctx, point2_t *point, triangle_t *triangle);
 void swap_point(point2_t *point1, point2_t *point2);
