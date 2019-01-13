@@ -100,9 +100,9 @@ TEST(lerp_second)
 TEST(sort_first)
 {
     triangle_t tris = triangle(
-        -0.5, -0.75, 0,
-        -0.75, -0.33, 0,
-        -0.25, -0.25, 0);
+        0.5, 0.75, 0,
+        0.75, 0.33, 0,
+        0.25, 0.25, 0);
 
     ASSERT_THAT(0 == 1);
 }
