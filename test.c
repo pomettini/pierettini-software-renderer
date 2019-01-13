@@ -99,12 +99,26 @@ TEST(lerp_second)
 
 TEST(sort_first)
 {
-    triangle_t tris = triangle(
-        0.5, 0.75, 0,
-        0.75, 0.33, 0,
-        0.25, 0.25, 0);
+    context_t ctx;
+    ctx.width = 300;
+    ctx.height = 300;
 
-    ASSERT_THAT(0 == 1);
+    triangle_t tris = triangle(
+        0.0, -1.0, 0,
+        -1.0, 1.0, 0,
+        1.0, 1.0, 0);
+
+    point2_t point[3];
+    sort_triangle(&ctx, &point, &tris);
+
+    ASSERT_THAT(point[0].x == 150);
+    ASSERT_THAT(point[0].y == 0);
+
+    ASSERT_THAT(point[1].x == 0);
+    ASSERT_THAT(point[1].y == 300);
+
+    ASSERT_THAT(point[2].x == 300);
+    ASSERT_THAT(point[2].y == 300);
 }
 
 TEST(swap_point)
@@ -123,7 +137,6 @@ int main(int argc, char **argv)
     RUN_TEST(lerp_first);
     RUN_TEST(lerp_second);
     RUN_TEST(sort_first);
-    RUN_TEST(sort_second);
     RUN_TEST(swap_point);
 
     PRINT_TEST_RESULTS();

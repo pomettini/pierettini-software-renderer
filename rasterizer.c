@@ -94,7 +94,6 @@ void rasterize(context_t *ctx, triangle_t *triangle)
 // This function will sort the vertices of a triangle on their Y
 void sort_triangle(context_t *ctx, point2_t *point, triangle_t *triangle)
 {
-
     A = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
     B = screen_space_to_pixel(triangle->b.position.x, triangle->b.position.y, ctx->width, ctx->height);
     C = screen_space_to_pixel(triangle->c.position.x, triangle->c.position.y, ctx->width, ctx->height);
