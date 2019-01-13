@@ -1,6 +1,7 @@
 #include "rasterizer.h"
 #include <string.h>
 
+// crazy defines
 #define A point[0]
 #define B point[1]
 #define C point[2]
@@ -18,7 +19,7 @@ triangle_t triangle_new(vertex_t a, vertex_t b, vertex_t c)
     triangle_t triangle = {.a = a, .b = b, .c = c};
     return triangle;
 }
-
+// Giving a context, it colors a single pixel on the screen
 void put_pixel(int x, int y, context_t *ctx, int r, int g, int b)
 {
     if (x < 0 || y < 0 || x >= ctx->width || y >= ctx->height)
@@ -31,12 +32,14 @@ void put_pixel(int x, int y, context_t *ctx, int r, int g, int b)
     ctx->framebuffer[offset] = 255;
 }
 
+// Giving the triangle coords, draw on the screen
 void rasterize(context_t *ctx, triangle_t *triangle)
 {
     point2_t point[3];
     sort_triangle(ctx, point, triangle);
-    
+
     int total_height = C.y - A.y;
+    // First triangle
     for (int y = A.y; y <= B.y; y++)
     {
         int segment_height = B.y - A.y + 1;
@@ -63,7 +66,7 @@ void rasterize(context_t *ctx, triangle_t *triangle)
     }
 
     // TODO: Refactor to a single for loop
-
+    // Second triangle
     for (int y = B.y; y <= C.y; y++)
     {
         int segment_height = C.y - B.y + 1;
@@ -88,9 +91,9 @@ void rasterize(context_t *ctx, triangle_t *triangle)
     }
 }
 
+// This function will sort the vertices of a triangle on their Y
 void sort_triangle(context_t *ctx, point2_t *point, triangle_t *triangle)
 {
-    // This function will sort the vertices of a triangle on their Y
 
     A = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
     B = screen_space_to_pixel(triangle->b.position.x, triangle->b.position.y, ctx->width, ctx->height);

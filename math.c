@@ -1,5 +1,6 @@
 #include "math.h"
 
+// Convert from screen space to pixels
 point2_t screen_space_to_pixel(float x, float y, int width, int height)
 {
     point2_t point;
