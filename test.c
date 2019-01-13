@@ -36,22 +36,59 @@ TEST(screen_space_to_pixel_overflow_negative)
 
 TEST(vector3_init)
 {
-    ASSERT_THAT(0 == 1);
+    vector3_t vec = vector3_new(1, 2, 3);
+    ASSERT_THAT(vec.x == 1);
+    ASSERT_THAT(vec.y == 2);
+    ASSERT_THAT(vec.z == 3);
+}
+
+TEST(vertex_init)
+{
+    vector3_t vec = vector3_new(1, 2, 3);
+    vertex_t vertex = vertex_new(vec);
+
+    ASSERT_THAT(vertex.position.x == 1);
+    ASSERT_THAT(vertex.position.x == 2);
+    ASSERT_THAT(vertex.position.x == 3);
 }
 
 TEST(triangle_init)
 {
-    ASSERT_THAT(0 == 1);
+    vector3_t vec = vector3_new(1, 2, 3);
+    vector3_t vec2 = vector3_new(4, 5, 6);
+    vector3_t vec3 = vector3_new(7, 8, 9);
+    vertex_t vertex = vertex_new(vec);
+    vertex_t vertex2 = vertex_new(vec2);
+    vertex_t vertex3 = vertex_new(vec3);
+
+    triangle_t triangle = triangle_new(vertex, vertex2, vertex3);
+
+    // A
+    ASSERT_THAT(triangle.a.position.x == 1);
+    ASSERT_THAT(triangle.a.position.y == 2);
+    ASSERT_THAT(triangle.a.position.z == 3);
+    // B
+    ASSERT_THAT(triangle.b.position.x == 4);
+    ASSERT_THAT(triangle.b.position.y == 5);
+    ASSERT_THAT(triangle.b.position.z == 6);
+    //C
+    ASSERT_THAT(triangle.c.position.x == 7);
+    ASSERT_THAT(triangle.c.position.y == 8);
+    ASSERT_THAT(triangle.c.position.z == 9);
 }
 
 TEST(lerp_first)
 {
-    ASSERT_THAT(0 == 1);
+    float value = lerp(1, 2, 0.5);
+
+    ASSERT_THAT(value == 1.5);
 }
 
 TEST(lerp_second)
 {
-    ASSERT_THAT(0 == 1);
+   float value = lerp (-1, -3, 0.5);
+
+    ASSERT_THAT(value == -2);
 }
 
 TEST(sort_first)
