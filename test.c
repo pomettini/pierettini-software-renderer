@@ -33,12 +33,48 @@ TEST(screen_space_to_pixel_overflow_negative)
     ASSERT_THAT(result.y == -1);
 }
 
+TEST(vector3_init)
+{
+    ASSERT_THAT(0 == 1);
+}
+
+TEST(triangle_init)
+{
+    ASSERT_THAT(0 == 1);
+}
+
+TEST(lerp_first)
+{
+    ASSERT_THAT(0 == 1);
+}
+
+TEST(lerp_second)
+{
+    ASSERT_THAT(0 == 1);
+}
+
+TEST(sort_first)
+{
+    ASSERT_THAT(0 == 1);
+}
+
+TEST(sort_second)
+{
+    ASSERT_THAT(0 == 1);
+}
+
 int main(int argc, char **argv)
 {
     RUN_TEST(screen_space_to_pixel_conversion);
     RUN_TEST(screen_space_to_pixel_conversion_negative);
     RUN_TEST(screen_space_to_pixel_overflow);
     RUN_TEST(screen_space_to_pixel_overflow_negative);
+    RUN_TEST(vector3_init);
+    RUN_TEST(triangle_init);
+    RUN_TEST(lerp_first);
+    RUN_TEST(lerp_second);
+    RUN_TEST(sort_first);
+    RUN_TEST(sort_second);
 
     PRINT_TEST_RESULTS();
     return 0;
