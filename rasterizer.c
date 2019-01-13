@@ -35,52 +35,7 @@ void rasterize(context_t *ctx, triangle_t *triangle)
 {
     point2_t point[3];
     sort_triangle(ctx, point, triangle);
-
-    // point2_t pixel = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
-
-    // put_pixel(pixel.x, pixel.y, ctx);
-
-    // pixel = screen_space_to_pixel(triangle->b.position.x, triangle->b.position.y, ctx->width, ctx->height);
-
-    // put_pixel(pixel.x, pixel.y, ctx);
-
-    // pixel = screen_space_to_pixel(triangle->c.position.x, triangle->c.position.y, ctx->width, ctx->height);
-
-    // put_pixel(pixel.x, pixel.y, ctx);
-
-    // float a_b_slope = inversed_slope(point[0].x, point[0].y, point[1].x, point[1].y);
-    // float a_c_slope = inversed_slope(point[0].x, point[0].y, point[2].x, point[2].y);
-    // float b_c_slope = inversed_slope(point[1].x, point[1].y, point[2].x, point[2].y);
-
-    // if (a_b_slope < a_c_slope)
-    //     SDL_Log("Left");
-    // else
-    //     SDL_Log("Right");
-
-    // for (int y = A.y; y <= B.y; y++)
-    // {
-    //     int x = A.x + ((y - A.y) * a_b_slope);
-    //     put_pixel(x, y, ctx);
-    // }
-
-    // for (int y = A.y; y <= (C.y * 0.5) + (A.y * 0.5); y++)
-    // {
-    //     int x = A.x + ((y - A.y) * a_c_slope);
-    //     put_pixel(x, y, ctx);
-    // }
-
-    // for (int y = B.y; y <= C.y; y++)
-    // {
-    //     int x = B.x + ((y - B.y) * b_c_slope);
-    //     put_pixel(x, y, ctx);
-    // }
-
-    // for (int y = (C.y * 0.5) + (A.y * 0.5); y <= C.y; y++)
-    // {
-    //     int x = A.x + ((y - A.y) * a_c_slope);
-    //     put_pixel(x, y, ctx);
-    // }
-
+    
     int total_height = C.y - A.y;
     for (int y = A.y; y <= B.y; y++)
     {
@@ -97,7 +52,7 @@ void rasterize(context_t *ctx, triangle_t *triangle)
         point_b.y = A.y + (B.y - A.y) * beta;
 
         // If the triangle is facing left, I swap the vertices
-        // So it will render from left to right  
+        // So it will render from left to right
         if (point_a.x > point_b.x)
             swap_point(&point_a, &point_b);
 
@@ -135,6 +90,8 @@ void rasterize(context_t *ctx, triangle_t *triangle)
 
 void sort_triangle(context_t *ctx, point2_t *point, triangle_t *triangle)
 {
+    // This function will sort the vertices of a triangle on their Y
+
     A = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
     B = screen_space_to_pixel(triangle->b.position.x, triangle->b.position.y, ctx->width, ctx->height);
     C = screen_space_to_pixel(triangle->c.position.x, triangle->c.position.y, ctx->width, ctx->height);
