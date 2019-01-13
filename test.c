@@ -86,7 +86,7 @@ TEST(lerp_first)
 
 TEST(lerp_second)
 {
-   float value = lerp (-1, -3, 0.5);
+    float value = lerp(-1, -3, 0.5);
 
     ASSERT_THAT(value == -2);
 }
@@ -97,6 +97,11 @@ TEST(sort_first)
 }
 
 TEST(sort_second)
+{
+    ASSERT_THAT(0 == 1);
+}
+
+TEST(swap_point)
 {
     ASSERT_THAT(0 == 1);
 }
@@ -113,6 +118,7 @@ int main(int argc, char **argv)
     RUN_TEST(lerp_second);
     RUN_TEST(sort_first);
     RUN_TEST(sort_second);
+    RUN_TEST(swap_point);
 
     PRINT_TEST_RESULTS();
     return 0;
