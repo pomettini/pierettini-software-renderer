@@ -19,69 +19,67 @@ triangle_t triangle_new(vertex_t a, vertex_t b, vertex_t c)
     return triangle;
 }
 
-void put_pixel(int x, int y, context_t *ctx)
+void put_pixel(int x, int y, context_t *ctx, int r, int g, int b)
 {
     if (x < 0 || y < 0 || x >= ctx->width || y >= ctx->height)
         return;
 
     int offset = ((y * ctx->width) + x) * 4;
-    ctx->framebuffer[offset++] = 255;
-    ctx->framebuffer[offset++] = 255;
-    ctx->framebuffer[offset++] = 255;
+    ctx->framebuffer[offset++] = r;
+    ctx->framebuffer[offset++] = g;
+    ctx->framebuffer[offset++] = b;
     ctx->framebuffer[offset] = 255;
 }
 
 void rasterize(context_t *ctx, triangle_t *triangle)
 {
-    point2_t pixel = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
-
-    put_pixel(pixel.x, pixel.y, ctx);
-
-    pixel = screen_space_to_pixel(triangle->b.position.x, triangle->b.position.y, ctx->width, ctx->height);
-
-    put_pixel(pixel.x, pixel.y, ctx);
-
-    pixel = screen_space_to_pixel(triangle->c.position.x, triangle->c.position.y, ctx->width, ctx->height);
-
-    put_pixel(pixel.x, pixel.y, ctx);
-
     point2_t point[3];
     sort_triangle(ctx, point, triangle);
 
-    float a_b_slope = inversed_slope(point[0].x, point[0].y, point[1].x, point[1].y);
-    float a_c_slope = inversed_slope(point[0].x, point[0].y, point[2].x, point[2].y);
-    float b_c_slope = inversed_slope(point[1].x, point[1].y, point[2].x, point[2].y);
+    // point2_t pixel = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
+
+    // put_pixel(pixel.x, pixel.y, ctx);
+
+    // pixel = screen_space_to_pixel(triangle->b.position.x, triangle->b.position.y, ctx->width, ctx->height);
+
+    // put_pixel(pixel.x, pixel.y, ctx);
+
+    // pixel = screen_space_to_pixel(triangle->c.position.x, triangle->c.position.y, ctx->width, ctx->height);
+
+    // put_pixel(pixel.x, pixel.y, ctx);
+
+    // float a_b_slope = inversed_slope(point[0].x, point[0].y, point[1].x, point[1].y);
+    // float a_c_slope = inversed_slope(point[0].x, point[0].y, point[2].x, point[2].y);
+    // float b_c_slope = inversed_slope(point[1].x, point[1].y, point[2].x, point[2].y);
 
     // if (a_b_slope < a_c_slope)
     //     SDL_Log("Left");
     // else
     //     SDL_Log("Right");
 
-    for (int y = A.y; y <= B.y; y++)
-    {
-        int x = A.x + ((y - A.y) * a_b_slope);
-        put_pixel(x, y, ctx);
-    }
+    // for (int y = A.y; y <= B.y; y++)
+    // {
+    //     int x = A.x + ((y - A.y) * a_b_slope);
+    //     put_pixel(x, y, ctx);
+    // }
 
-    for (int y = A.y; y <= (C.y * 0.5) + (A.y * 0.5); y++)
-    {
-        int x = A.x + ((y - A.y) * a_c_slope);
-        put_pixel(x, y, ctx);
-    }
+    // for (int y = A.y; y <= (C.y * 0.5) + (A.y * 0.5); y++)
+    // {
+    //     int x = A.x + ((y - A.y) * a_c_slope);
+    //     put_pixel(x, y, ctx);
+    // }
 
-    for (int y = B.y; y <= C.y; y++)
-    {
-        int x = B.x + ((y - B.y) * b_c_slope);
-        put_pixel(x, y, ctx);
-    }
+    // for (int y = B.y; y <= C.y; y++)
+    // {
+    //     int x = B.x + ((y - B.y) * b_c_slope);
+    //     put_pixel(x, y, ctx);
+    // }
 
-    for (int y = (C.y * 0.5) + (A.y * 0.5); y <= C.y; y++)
-    {
-        int x = A.x + ((y - A.y) * a_c_slope);
-        put_pixel(x, y, ctx);
-    }
-
-    // The code below has been stolen from https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling
+    // for (int y = (C.y * 0.5) + (A.y * 0.5); y <= C.y; y++)
+    // {
+    //     int x = A.x + ((y - A.y) * a_c_slope);
+    //     put_pixel(x, y, ctx);
+    // }
 
     int total_height = C.y - A.y;
     for (int y = A.y; y <= B.y; y++)
@@ -98,14 +96,18 @@ void rasterize(context_t *ctx, triangle_t *triangle)
         point_b.x = A.x + (B.x - A.x) * beta;
         point_b.y = A.y + (B.y - A.y) * beta;
 
+        // If the triangle is facing left, I swap the vertices
+        // So it will render from left to right  
         if (point_a.x > point_b.x)
             swap_point(&point_a, &point_b);
 
         for (int j = point_a.x; j <= point_b.x; j++)
         {
-            put_pixel(j, y, ctx);
+            put_pixel(j, y, ctx, 0, 255, 0);
         }
     }
+
+    // TODO: Refactor to a single for loop
 
     for (int y = B.y; y <= C.y; y++)
     {
@@ -126,7 +128,7 @@ void rasterize(context_t *ctx, triangle_t *triangle)
 
         for (int j = point_a.x; j <= point_b.x; j++)
         {
-            put_pixel(j, y, ctx);
+            put_pixel(j, y, ctx, 0, 0, 255);
         }
     }
 }

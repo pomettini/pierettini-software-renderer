@@ -13,22 +13,35 @@
 
 int main(int argc, char **argv)
 {
-    SDL_Log("Ciao");
-
     context_t ctx;
     ctx.width = 600;
     ctx.height = 600;
 
     ctx.framebuffer = NULL;
 
-    triangle_t triangle = triangle(
-        0, 0.5, 0,
-        0.5, 0, 0,
-        0, -0.5, 0);
+    triangle_t triangle1 = triangle(
+        -0.5, -0.75, 0,
+        -0.75, -0.33, 0,
+        -0.25, -0.25, 0);
+
+    triangle_t triangle2 = triangle(
+        0.25, -0.75, 0,
+        0.75, -0.33, 0,
+        0.25, -0.25, 0);
+
+    triangle_t triangle3 = triangle(
+        -0.25, 0.75, 0,
+        -0.25, 0.25, 0,
+        -0.75, 0.33, 0);
+
+    triangle_t triangle4 = triangle(
+        0.75, 0.5, 0,
+        0.33, 0.75, 0,
+        0.25, 0.25, 0);
 
     SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_Window *window = SDL_CreateWindow("Pierettini Renderer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, 0);
+    SDL_Window *window = SDL_CreateWindow("Pierettini Sotware Renderer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, 0);
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -47,7 +60,10 @@ int main(int argc, char **argv)
         int pitch;
         SDL_LockTexture(texture, NULL, (void **)&ctx.framebuffer, &pitch);
 
-        rasterize(&ctx, &triangle);
+        rasterize(&ctx, &triangle1);
+        rasterize(&ctx, &triangle2);
+        rasterize(&ctx, &triangle3);
+        rasterize(&ctx, &triangle4);
 
         SDL_UnlockTexture(texture);
 
