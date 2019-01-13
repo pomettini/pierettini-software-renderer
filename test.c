@@ -2,6 +2,12 @@
 #include "math.h"
 #include "rasterizer.h"
 
+#define triangle(x0, y0, z0, x1, y1, z1, x2, y2, z2) \
+    triangle_new(                                    \
+        vertex_new(vector3_new(x0, y0, z0)),         \
+        vertex_new(vector3_new(x1, y1, z1)),         \
+        vertex_new(vector3_new(x2, y2, z2)))
+
 TEST(screen_space_to_pixel_conversion)
 {
     point2_t result = screen_space_to_pixel(0.5, 0.5, 400, 400);
@@ -93,11 +99,11 @@ TEST(lerp_second)
 
 TEST(sort_first)
 {
-    ASSERT_THAT(0 == 1);
-}
+    triangle_t tris = triangle(
+        -0.5, -0.75, 0,
+        -0.75, -0.33, 0,
+        -0.25, -0.25, 0);
 
-TEST(sort_second)
-{
     ASSERT_THAT(0 == 1);
 }
 
