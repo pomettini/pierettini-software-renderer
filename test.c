@@ -123,7 +123,21 @@ TEST(sort_first)
 
 TEST(swap_point)
 {
-    ASSERT_THAT(0 == 1);
+    point2_t point1;
+    point1.x = 10;
+    point1.y = 20;
+
+    point2_t point2;
+    point2.x = 30;
+    point2.y = 40;
+
+    swap_point(&point1, &point2);
+
+    ASSERT_THAT(point1.x == 30);
+    ASSERT_THAT(point1.y == 40);
+
+    ASSERT_THAT(point2.x == 10);
+    ASSERT_THAT(point2.y == 20);
 }
 
 int main(int argc, char **argv)
