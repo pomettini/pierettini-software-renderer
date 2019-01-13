@@ -1,3 +1,6 @@
+#ifndef _MATH_H_
+#define _MATH_H_
+
 typedef struct point2
 {
     int x;
@@ -22,3 +25,5 @@ vector3_t vector3_new(float x, float y, float z);
 vector3_t vector3_zero();
 float lerp(float start, float end, float gradient);
 float inversed_slope(float x0, float y0, float x1, float y1);
+
+#endif

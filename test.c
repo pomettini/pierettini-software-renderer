@@ -1,5 +1,6 @@
 #include "aiv_unit_test.h"
 #include "math.h"
+#include "rasterizer.h"
 
 TEST(screen_space_to_pixel_conversion)
 {

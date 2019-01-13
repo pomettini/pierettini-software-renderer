@@ -25,7 +25,7 @@ main.o: main.c
 	$(CC) -c -o $@ $(CFLAGS) $^
 	$(CPPCHECK) $^
 
-test: test.o math.o
+test: test.o math.o rasterizer.o
 	$(CC) -o $(BINARY_TESTS) $(LDFLAGS) $^
 	./$(BINARY_TESTS)
 
