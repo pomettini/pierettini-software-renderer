@@ -19,31 +19,45 @@ int main(int argc, char **argv)
     ctx.framebuffer = NULL;
 
     // Create the triangles
+    // for the square
     triangle_t triangle1 = triangle(
-        -0.5, -0.75, 0,
-        -0.75, -0.33, 0,
-        -0.25, -0.25, 0);
+        -0.5, -0.5, 0,
+        -0.5, 0.5, 0,
+        0.5, 0.5, 0);
 
     triangle_t triangle2 = triangle(
-        0.25, -0.75, 0,
-        0.75, -0.33, 0,
-        0.25, -0.25, 0);
+        -0.5, -0.5, 0,
+        0.5, -0.5, 0,
+        0.5, 0.5, 0);
 
+    // for the edges of the screen
     triangle_t triangle3 = triangle(
-        -0.25, 0.75, 0,
-        -0.25, 0.25, 0,
-        -0.75, 0.33, 0);
+        -1, -1, 0,
+        -1, -0.75, 0,
+        -0.75, -1, 0);
 
     triangle_t triangle4 = triangle(
-        0.75, 0.5, 0,
-        0.33, 0.75, 0,
-        0.25, 0.25, 0);
+        1, 1, 0,
+        1, 0.75, 0,
+        0.75, 1, 0);
+
+    triangle_t triangle5 = triangle(
+        -1, 1, 0,
+        -1, 0.75, 0,
+        -0.75, 1, 0);
+
+    triangle_t triangle6 = triangle(
+        1, -1, 0,
+        1, -0.75, 0,
+        0.75, -1, 0);
 
     triangle_list_init(&ctx);
     append_triangle(&ctx, triangle1);
     append_triangle(&ctx, triangle2);
     append_triangle(&ctx, triangle3);
     append_triangle(&ctx, triangle4);
+    append_triangle(&ctx, triangle5);
+    append_triangle(&ctx, triangle6);
 
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -81,10 +95,12 @@ int main(int argc, char **argv)
         SDL_LockTexture(texture, NULL, (void **)&ctx.framebuffer, &pitch);
 
         // Draw the triangles
-        rasterize(&ctx, &ctx.triangles[0]);
-        rasterize(&ctx, &ctx.triangles[1]);
+        // rasterize(&ctx, &ctx.triangles[0]);
+        // rasterize(&ctx, &ctx.triangles[1]);
         rasterize(&ctx, &ctx.triangles[2]);
         rasterize(&ctx, &ctx.triangles[3]);
+        rasterize(&ctx, &ctx.triangles[4]);
+        rasterize(&ctx,&ctx.triangles[5]);
 
         SDL_UnlockTexture(texture);
 
