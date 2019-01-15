@@ -27,6 +27,26 @@ vector3_t vector3_zero()
     return vector3;
 }
 
+// TEST
+vector3_t vector3_add(vector3_t a, vector3_t b)
+{
+    vector3_t add;
+    add.x = a.x + b.x;
+    add.y = a.y + b.y;
+    add.z = a.z + b.z;
+    return add;
+}
+
+// TEST
+vector3_t vector3_sub(vector3_t a, vector3_t b)
+{
+    vector3_t sub;
+    sub.x = a.x - b.x;
+    sub.y = a.y - b.y;
+    sub.z = a.z - b.z;
+    return sub;
+}
+
 float lerp(float start, float end, float gradient)
 {
     return start + (end - start) * gradient;

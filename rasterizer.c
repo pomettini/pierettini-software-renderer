@@ -1,11 +1,12 @@
 #include "rasterizer.h"
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 // crazy defines
-#define A point[0]
-#define B point[1]
-#define C point[2]
+#define A triangle->a.pixel_point
+#define B triangle->b.pixel_point
+#define C triangle->c.pixel_point
 
 vertex_t vertex_new(vector3_t position)
 {
@@ -20,6 +21,7 @@ triangle_t triangle_new(vertex_t a, vertex_t b, vertex_t c)
     triangle_t triangle = {.a = a, .b = b, .c = c};
     return triangle;
 }
+
 // Giving a context, it colors a single pixel on the screen
 void put_pixel(int x, int y, context_t *ctx, int r, int g, int b)
 {
@@ -61,8 +63,15 @@ void triangle_list_resize(context_t *ctx)
 // Giving the triangle coords, draw on the screen
 void rasterize(context_t *ctx, triangle_t *triangle)
 {
-    point2_t point[3];
-    sort_triangle(ctx, point, triangle);
+    point_to_view(ctx, &triangle->a);
+    point_to_view(ctx, &triangle->b);
+    point_to_view(ctx, &triangle->c);
+
+    view_to_raster(ctx, &triangle->a);
+    view_to_raster(ctx, &triangle->b);
+    view_to_raster(ctx, &triangle->c);
+
+    sort_triangle(ctx, triangle);
 
     int total_height = C.y - A.y;
     // First triangle
@@ -118,12 +127,8 @@ void rasterize(context_t *ctx, triangle_t *triangle)
 }
 
 // This function will sort the vertices of a triangle on their Y
-void sort_triangle(context_t *ctx, point2_t *point, triangle_t *triangle)
+void sort_triangle(context_t *ctx, triangle_t *triangle)
 {
-    A = screen_space_to_pixel(triangle->a.position.x, triangle->a.position.y, ctx->width, ctx->height);
-    B = screen_space_to_pixel(triangle->b.position.x, triangle->b.position.y, ctx->width, ctx->height);
-    C = screen_space_to_pixel(triangle->c.position.x, triangle->c.position.y, ctx->width, ctx->height);
-
     if (A.y > B.y)
         swap_point(&A, &B);
 
@@ -139,4 +144,21 @@ void swap_point(point2_t *point1, point2_t *point2)
     point2_t temp = *point2;
     *point2 = *point1;
     *point1 = temp;
+}
+
+static void view_to_raster(context_t *ctx, vertex_t *vertex)
+{
+    float fov = (60.0 / 2) * (M_PI / 180.0);
+    float camera_distance = tan(fov);
+
+    float projected_x = vertex->view_position.x / (camera_distance * vertex->view_position.z);
+    float projected_y = vertex->view_position.y / (camera_distance * vertex->view_position.z);
+
+    vertex->pixel_point.x = (projected_x + 1) * (ctx->width * 0.5);
+    vertex->pixel_point.y = ctx->height - ((projected_y + 1) * (ctx->height * 0.5));
+}
+
+static void point_to_view(context_t *ctx, vertex_t *vertex)
+{
+    vertex->view_position = vector3_sub(vertex->position, ctx->camera_position);
 }

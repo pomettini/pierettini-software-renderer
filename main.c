@@ -52,6 +52,7 @@ int main(int argc, char **argv)
         0.75, -1, 0);
 
     triangle_list_init(&ctx);
+
     append_triangle(&ctx, triangle1);
     append_triangle(&ctx, triangle2);
     append_triangle(&ctx, triangle3);
@@ -60,6 +61,8 @@ int main(int argc, char **argv)
     append_triangle(&ctx, triangle6);
 
     SDL_Init(SDL_INIT_VIDEO);
+
+    ctx.camera_position = vector3_new(0, 0, -5);
 
     // Create the window
     SDL_Window *window = SDL_CreateWindow("Pierettini Software Renderer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, 0);
@@ -87,20 +90,44 @@ int main(int argc, char **argv)
 
         while (SDL_PollEvent(&event))
         {
+            if (event.type == SDL_KEYDOWN)
+            {
+                if (event.key.keysym.sym == SDLK_LEFT)
+                {
+                    ctx.camera_position.x -= 0.1f;
+                }
+                else if (event.key.keysym.sym == SDLK_RIGHT)
+                {
+                    ctx.camera_position.x += 0.1f;
+                }
+
+                if (event.key.keysym.sym == SDLK_UP)
+                {
+                    ctx.camera_position.z -= 0.1f;
+                }
+                else if (event.key.keysym.sym == SDLK_DOWN)
+                {
+                    ctx.camera_position.z += 0.1f;
+                }
+            }
+
             if (event.type == SDL_QUIT)
                 return 0;
         }
 
+
         int pitch;
         SDL_LockTexture(texture, NULL, (void **)&ctx.framebuffer, &pitch);
 
+        memset(ctx.framebuffer, 0, ctx.width * ctx.height * 4);
+
         // Draw the triangles
-        // rasterize(&ctx, &ctx.triangles[0]);
-        // rasterize(&ctx, &ctx.triangles[1]);
+        rasterize(&ctx, &ctx.triangles[0]);
+        rasterize(&ctx, &ctx.triangles[1]);
         rasterize(&ctx, &ctx.triangles[2]);
         rasterize(&ctx, &ctx.triangles[3]);
         rasterize(&ctx, &ctx.triangles[4]);
-        rasterize(&ctx,&ctx.triangles[5]);
+        rasterize(&ctx, &ctx.triangles[5]);
 
         SDL_UnlockTexture(texture);
 

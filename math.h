@@ -25,5 +25,7 @@ vector3_t vector3_new(float x, float y, float z);
 vector3_t vector3_zero();
 float lerp(float start, float end, float gradient);
 float inversed_slope(float x0, float y0, float x1, float y1);
+vector3_t vector3_add(vector3_t a, vector3_t b);
+vector3_t vector3_sub(vector3_t a, vector3_t b);
 
 #endif

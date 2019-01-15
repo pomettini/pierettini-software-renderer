@@ -108,17 +108,16 @@ TEST(sort_first)
         -1.0, 1.0, 0,
         1.0, 1.0, 0);
 
-    point2_t point[3];
-    sort_triangle(&ctx, &point, &tris);
+    sort_triangle(&ctx, &tris);
 
-    ASSERT_THAT(point[0].x == 150);
-    ASSERT_THAT(point[0].y == 0);
+    ASSERT_THAT(tris.a.pixel_point.x == 150);
+    ASSERT_THAT(tris.a.pixel_point.y == 0);
 
-    ASSERT_THAT(point[1].x == 0);
-    ASSERT_THAT(point[1].y == 300);
+    ASSERT_THAT(tris.b.pixel_point.x == 0);
+    ASSERT_THAT(tris.b.pixel_point.y == 300);
 
-    ASSERT_THAT(point[2].x == 300);
-    ASSERT_THAT(point[2].y == 300);
+    ASSERT_THAT(tris.c.pixel_point.x == 300);
+    ASSERT_THAT(tris.c.pixel_point.y == 300);
 }
 
 TEST(swap_point)
