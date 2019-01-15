@@ -1,5 +1,6 @@
 #include "rasterizer.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <SDL2/SDL.h>
 
 // Create the triangle struct
@@ -8,7 +9,6 @@
         vertex_new(vector3_new(x0, y0, z0)),         \
         vertex_new(vector3_new(x1, y1, z1)),         \
         vertex_new(vector3_new(x2, y2, z2)))
-
 
 int main(int argc, char **argv)
 {
@@ -39,23 +39,29 @@ int main(int argc, char **argv)
         0.33, 0.75, 0,
         0.25, 0.25, 0);
 
+    triangle_list_init(&ctx);
+    append_triangle(&ctx, triangle1);
+    append_triangle(&ctx, triangle2);
+    append_triangle(&ctx, triangle3);
+    append_triangle(&ctx, triangle4);
+
     SDL_Init(SDL_INIT_VIDEO);
 
     // Create the window
-    SDL_Window *window = SDL_CreateWindow("Pierettini Sotware Renderer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, 0);
-    if(!window)
+    SDL_Window *window = SDL_CreateWindow("Pierettini Software Renderer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, 0);
+    if (!window)
     {
         SDL_Log("Unable to create window: %s", SDL_GetError);
     }
     // Create the renderer
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if(!renderer)
+    if (!renderer)
     {
         SDL_Log("Unable to create renderer: %s", SDL_GetError);
     }
     // Create the texture
     SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 600, 600);
-    if(!texture)
+    if (!texture)
     {
         SDL_Log("Unable to create texture: &s", SDL_GetError);
     }
@@ -75,10 +81,10 @@ int main(int argc, char **argv)
         SDL_LockTexture(texture, NULL, (void **)&ctx.framebuffer, &pitch);
 
         // Draw the triangles
-        rasterize(&ctx, &triangle1);
-        rasterize(&ctx, &triangle2);
-        rasterize(&ctx, &triangle3);
-        rasterize(&ctx, &triangle4);
+        rasterize(&ctx, &ctx.triangles[0]);
+        rasterize(&ctx, &ctx.triangles[1]);
+        rasterize(&ctx, &ctx.triangles[2]);
+        rasterize(&ctx, &ctx.triangles[3]);
 
         SDL_UnlockTexture(texture);
 

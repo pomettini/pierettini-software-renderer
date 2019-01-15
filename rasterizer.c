@@ -1,4 +1,5 @@
 #include "rasterizer.h"
+#include <stdlib.h>
 #include <string.h>
 
 // crazy defines
@@ -30,6 +31,31 @@ void put_pixel(int x, int y, context_t *ctx, int r, int g, int b)
     ctx->framebuffer[offset++] = g;
     ctx->framebuffer[offset++] = b;
     ctx->framebuffer[offset] = 255;
+}
+
+// adding a triangle in a list of memory
+void append_triangle(context_t *ctx, triangle_t triangle)
+{
+    if (ctx->triangles_index >= ctx->triangles_length)
+        triangle_list_resize(ctx);
+
+    ctx->triangles[ctx->triangles_index] = triangle;
+    ctx->triangles_index++;
+}
+
+// create a block of memory of 100 triangles
+void triangle_list_init(context_t *ctx)
+{
+    ctx->triangles_index = 0;
+    ctx->triangles_length = 2;
+    ctx->triangles = malloc(sizeof(triangle_t) * ctx->triangles_length);
+    memset(ctx->triangles, 0, sizeof(triangle_t) * ctx->triangles_length);
+}
+
+void triangle_list_resize(context_t *ctx)
+{
+    ctx->triangles_length *= 2;
+    ctx->triangles = realloc(ctx->triangles, sizeof(triangle_t) * ctx->triangles_length);
 }
 
 // Giving the triangle coords, draw on the screen
